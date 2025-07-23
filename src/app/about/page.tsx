@@ -40,10 +40,10 @@ export default function About() {
 
             <div className="sm:col-span-2 text-gray-300 mt-4">
               <p>
-                I’m a proud Minnesota local, born and raised here. I’ve always loved technology and dreamed of working in a professional tech setting. Every day, I’m getting closer to that goal. I’m currently pursuing a Bachelor’s of Applied Science in Information Technology Infrastructure, with a focus on security and automation.
+                I&rsquo;m a proud Minnesota local, born and raised here. I&rsquo;ve always loved technology and dreamed of working in a professional tech setting. Every day, I&rsquo;m getting closer to that goal. I&rsquo;m currently pursuing a Bachelor&rsquo;s of Applied Science in Information Technology Infrastructure, with a focus on security and automation.
               </p>
               <p className="mt-4">
-                With experience in infrastructure support, cloud systems, and process automation, I enjoy building solutions that make people's lives easier. I'm passionate about learning, growing, and creating a lasting impact through tech.
+                With experience in infrastructure support, cloud systems, and process automation, I enjoy building solutions that make people&rsquo;s lives easier. I&rsquo;m passionate about learning, growing, and creating a lasting impact through tech.
               </p>
             </div>
           </div>
