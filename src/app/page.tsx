@@ -20,7 +20,8 @@ export default function Home() {
           </p>
 
           <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-2">
-  {`Hello, I'm `}<span className="text-green-400">Trenzin Gesar</span>
+  Hello, I&rsquo;m <span className="text-green-400">Trenzin Gesar</span>
+
 </h1>
 
           <h2 className="text-green-300 text-2xl mb-4 h-[40px]">
