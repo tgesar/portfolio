@@ -4,64 +4,58 @@ import nodemailer from 'nodemailer';
 // Ensure we run on Node (not Edge) for Nodemailer
 export const runtime = 'nodejs';
 
-const {
-  SMTP_HOST,
-  SMTP_PORT,
-  SMTP_USER,
-  SMTP_PASS,
-  TO_EMAIL = 'gesartrenzin@gmail.com', // where you receive messages
-} = process.env;
+type ContactPayload = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  message: string;
+};
 
-function required(name: string, val: any) {
+const getEnv = (name: string): string => {
+  const val = process.env[name];
   if (!val) throw new Error(`Missing env: ${name}`);
   return val;
-}
+};
 
 export async function POST(req: Request) {
   try {
-    const { firstName, lastName, email, subject, message } = await req.json();
+    // Remove `subject` since we don't use it (avoids no-unused-vars)
+    const { firstName, lastName, email, message } =
+      (await req.json()) as Partial<ContactPayload>;
 
-    // Basic validation (subject is ignored but allowed in payload)
     if (!firstName || !lastName || !email || !message) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
     }
 
-    // Create transporter
     const transporter = nodemailer.createTransport({
-      host: required('SMTP_HOST', SMTP_HOST),
-      port: Number(required('SMTP_PORT', SMTP_PORT)),
+      host: getEnv('SMTP_HOST'),
+      port: Number(getEnv('SMTP_PORT')),
       secure: true, // port 465
       auth: {
-        user: required('SMTP_USER', SMTP_USER),
-        pass: required('SMTP_PASS', SMTP_PASS),
+        user: getEnv('SMTP_USER'),
+        pass: getEnv('SMTP_PASS'),
       },
     });
 
-    // Your requested fixed subject + specific body format
     const finalSubject = 'Portfolio Contact Form';
-    const textBody =
-`FirstName: ${firstName}
+    const textBody = `FirstName: ${firstName}
 lastName: ${lastName}
 email: ${email}
 
 Message
 ${message}`;
 
-    // Send the email FROM yourself, TO yourself.
     await transporter.sendMail({
-      from: SMTP_USER,     // comes from your address
-      to: TO_EMAIL,        // goes to your inbox
+      from: getEnv('SMTP_USER'), // from yourself
+      to: process.env.TO_EMAIL ?? 'gesartrenzin@gmail.com',
       subject: finalSubject,
       text: textBody,
-      // Helpful so you can reply straight to the visitor:
-      replyTo: email,
+      replyTo: email, // so you can reply directly to the visitor
     });
 
     return NextResponse.json({ ok: true });
-  } catch (err: any) {
-    return NextResponse.json(
-      { error: err?.message || 'Failed to send message.' },
-      { status: 500 }
-    );
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Failed to send message.';
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

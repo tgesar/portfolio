@@ -16,18 +16,27 @@ const fadeIn = (delay = 0) => ({
   animate: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE, delay } },
 });
 
+type Status = 'idle' | 'loading' | 'success' | 'error';
+
 export default function Contact() {
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [message, setMessage] = useState<string>('');
+  const [status, setStatus] = useState<Status>('idle');
+  const [statusMsg, setStatusMsg] = useState<string>('');
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus('loading');
-    setMessage('');
+    setStatusMsg('');
 
     const form = e.currentTarget;
-    const formData = new FormData(form);
-    const payload = Object.fromEntries(formData.entries());
+    const data = new FormData(form);
+
+    const payload = {
+      firstName: String(data.get('firstName') ?? ''),
+      lastName: String(data.get('lastName') ?? ''),
+      email: String(data.get('email') ?? ''),
+      subject: String(data.get('subject') ?? ''),
+      message: String(data.get('message') ?? ''),
+    };
 
     try {
       const res = await fetch('/api/contact', {
@@ -37,16 +46,17 @@ export default function Contact() {
       });
 
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data?.error || 'Failed to send message.');
+        const errData: { error?: string } = await res.json().catch(() => ({}));
+        throw new Error(errData.error || 'Failed to send message.');
       }
 
       setStatus('success');
-      setMessage('Thanks — your message is on its way. I’ll get back to you soon!');
+      setStatusMsg('Thanks — your message is on its way. I’ll get back to you soon!');
       form.reset();
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Something went wrong. Please try again.';
       setStatus('error');
-      setMessage(err?.message || 'Something went wrong. Please try again.');
+      setStatusMsg(msg);
     }
   }
 
@@ -62,10 +72,7 @@ export default function Contact() {
 
       <div className="mx-auto flex min-h-screen max-w-7xl items-center justify-center px-6 py-20 md:px-12 lg:px-20">
         <div className="w-full max-w-3xl">
-          <motion.div
-            {...fadeIn(0.05)}
-            className="mb-8 flex items-center gap-3 text-sm text-zinc-400"
-          >
+          <motion.div {...fadeIn(0.05)} className="mb-8 flex items-center gap-3 text-sm text-zinc-400">
             <Link href="/" className="inline-flex items-center gap-2 hover:text-white">
               <FaArrowLeft /> Back home
             </Link>
@@ -75,13 +82,11 @@ export default function Contact() {
             <p className="text-sm uppercase tracking-[0.25em] text-[#00e5ff]">Contact</p>
             <h1 className="mt-2 text-4xl font-bold leading-[1.1] md:text-5xl">
               Let’s build something{' '}
-              <span className="bg-gradient-to-r from-[#00e5ff] to-[#8e84ff] bg-clip-text text-transparent">
-                great
-              </span>
+              <span className="bg-gradient-to-r from-[#00e5ff] to-[#8e84ff] bg-clip-text text-transparent">great</span>
             </h1>
             <p className="mt-3 max-w-2xl text-zinc-300">
-              Fill this out and I’ll get back within 1–2 business days. For direct email, you can
-              also reach me at <span className="text-[#7ee7ff]">gesartrenzin@gmail.com</span>.
+              Fill this out and I’ll get back within 1–2 business days. For direct email, you can also reach me at{' '}
+              <span className="text-[#7ee7ff]">gesartrenzin@gmail.com</span>.
             </p>
           </motion.header>
 
@@ -92,29 +97,19 @@ export default function Contact() {
           >
             <div className="pointer-events-none absolute inset-0 rounded-2xl shadow-[0_0_45px_-18px_#00e5ff,0_0_80px_-40px_#8e84ff_inset]" />
 
-            {/* Name row */}
             <div className="grid gap-4 md:grid-cols-2">
               <Field label="First Name" name="firstName" placeholder="Jane" required />
               <Field label="Last Name" name="lastName" placeholder="Doe" required />
             </div>
 
-            {/* Email */}
             <div className="mt-4">
-              <Field
-                label="Email"
-                name="email"
-                type="email"
-                placeholder="you@example.com"
-                required
-              />
+              <Field label="Email" name="email" type="email" placeholder="you@example.com" required />
             </div>
 
-            {/* Subject */}
             <div className="mt-4">
               <Field label="Subject" name="subject" placeholder="Project inquiry" required />
             </div>
 
-            {/* Message */}
             <div className="mt-4">
               <Field
                 label="Message"
@@ -126,26 +121,22 @@ export default function Contact() {
               />
             </div>
 
-            {/* Status */}
             {status !== 'idle' && (
               <div className="mt-4">
-                {status === 'loading' && (
-                  <p className="text-sm text-zinc-400">Sending…</p>
-                )}
+                {status === 'loading' && <p className="text-sm text-zinc-400">Sending…</p>}
                 {status === 'success' && (
                   <p className="inline-flex items-center gap-2 text-sm text-emerald-300">
-                    <FaCheckCircle /> {message}
+                    <FaCheckCircle /> {statusMsg}
                   </p>
                 )}
                 {status === 'error' && (
                   <p className="inline-flex items-center gap-2 text-sm text-rose-300">
-                    <FaExclamationTriangle /> {message}
+                    <FaExclamationTriangle /> {statusMsg}
                   </p>
                 )}
               </div>
             )}
 
-            {/* Submit */}
             <div className="mt-6">
               <button
                 type="submit"
@@ -158,12 +149,8 @@ export default function Contact() {
             </div>
           </motion.form>
 
-          {/* Extra: direct email */}
           <motion.p {...fadeIn(0.2)} className="mt-6 text-center text-xs text-zinc-400">
-            Prefer email?{' '}
-            <a href="mailto:gesartrenzin@gmail.com" className="text-[#7ee7ff] underline">
-              gesartrenzin@gmail.com
-            </a>
+            Prefer email? <a href="mailto:gesartrenzin@gmail.com" className="text-[#7ee7ff] underline">gesartrenzin@gmail.com</a>
           </motion.p>
         </div>
       </div>
@@ -188,20 +175,29 @@ function Field({
   rows?: number;
   required?: boolean;
 }) {
-  const InputTag: any = as === 'textarea' ? 'textarea' : 'input';
   return (
     <label className="block">
       <span className="mb-2 block text-xs font-semibold uppercase tracking-widest text-zinc-400">
         {label} {required && <span className="text-[#7ee7ff]">*</span>}
       </span>
-      <InputTag
-        name={name}
-        type={as ? undefined : type}
-        placeholder={placeholder}
-        rows={rows}
-        required={required}
-        className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-zinc-500 outline-none backdrop-blur transition focus:border-[#00e5ff]/60"
-      />
+
+      {as === 'textarea' ? (
+        <textarea
+          name={name}
+          placeholder={placeholder}
+          rows={rows}
+          required={required}
+          className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-zinc-500 outline-none backdrop-blur transition focus:border-[#00e5ff]/60"
+        />
+      ) : (
+        <input
+          name={name}
+          type={type}
+          placeholder={placeholder}
+          required={required}
+          className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-zinc-500 outline-none backdrop-blur transition focus:border-[#00e5ff]/60"
+        />
+      )}
     </label>
   );
 }
