@@ -261,7 +261,7 @@ export default function ResumePage() {
               </div>
 
               {/* Categorized chips */}
-              <div className="grid gap-6 md:grid-cols-3">
+              <div className="grid gap-6 md:grid-cols-4">
                 <SkillGroup
                   title="Data & Automation"
                   items={[
@@ -283,45 +283,23 @@ export default function ResumePage() {
                   title="Cloud & Ops"
                   items={['Azure', 'VMware', 'ServiceNow', 'Splunk', 'Git', 'CI/CD', 'Active Directory']}
                 />
+                {/* NEW: AI & Agents */}
+                <SkillGroup
+                  title="AI & Agents"
+                  items={[
+                    'AI agent design',
+                    'n8n automations',
+                    'Make.com scenarios',
+                    'Retell AI (voice)',
+                    'Prompt engineering',
+                    'Model fine-tuning (Golden Nails)',
+                    'Dataset prep & eval',
+                    'Webhook/API integration',
+                  ]}
+                />
               </div>
 
-              {/* Icon grid */}
-              <div className="grid grid-cols-3 gap-6 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
-                {[
-                  { name: 'SQL', file: 'sql' },
-                  { name: 'PowerApps', file: 'powerapps' },
-                  { name: 'PowerAutomate', file: 'powerautomate' },
-                  { name: 'SSMS', file: 'sql' },
-                  { name: 'Python', file: 'python' },
-                  { name: 'PowerShell', file: 'powershell' },
-                  { name: 'Next JS', file: 'next' },
-                  { name: 'React JS', file: 'react' },
-                  { name: 'Tailwind CSS', file: 'css' },
-                  { name: 'TypeScript', file: 'typescript' },
-                  { name: 'Node.js', file: 'node' },
-                  { name: 'Azure', file: 'azure' },
-                  { name: 'VMware', file: 'vmware' },
-                  { name: 'ServiceNow', file: 'servicenow' },
-                  { name: 'Splunk', file: 'splunk' },
-                  { name: 'Active Directory', file: 'activedirectory' },
-                  { name: 'HTML', file: 'html' },
-                  { name: 'CSS', file: 'css' },
-                  { name: 'Git', file: 'git' },
-                ].map((skill) => (
-                  <div key={skill.name} className="group relative flex items-center justify-center">
-                    <Image
-                      src={`/${skill.file}.svg`}
-                      alt={skill.name}
-                      width={50}
-                      height={50}
-                      className="object-contain grayscale transition duration-200 group-hover:grayscale-0"
-                    />
-                    <div className="absolute -bottom-5 text-[10px] text-zinc-400 opacity-0 transition group-hover:opacity-100">
-                      {skill.name}
-                    </div>
-                  </div>
-                ))}
-              </div>
+              {/* Removed the icon grid per your request */}
             </motion.div>
           )}
         </main>
@@ -344,7 +322,7 @@ function Card({ logo, alt, date, title, company, bullets }: CardProps) {
           <p className="text-xs font-mono tracking-wide text-[#7ee7ff]">{date}</p>
           <h3 className="mt-1 text-lg font-semibold">{title}</h3>
           <p className="text-xs font-mono text-zinc-400">{company}</p>
-          <ul className="mt-3 list-disc space-y-1 text-sm text-zinc-300 pl-5">
+          <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-zinc-300">
             {bullets.map((b, i) => (
               <li key={i}>{b}</li>
             ))}
