@@ -131,7 +131,7 @@ export default function About() {
             </p>
 
             <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <Fact icon={<FaGraduationCap />} label="Graduation" value="August 2025" />
+              <Fact icon={<FaGraduationCap />} label="Graduation" value="December 2025" />
               <Fact icon={<FaGlobe />} label="Languages" value="English, Tibetan" />
               <Fact icon={<FaGamepad />} label="Hobbies" value="Gaming, travel, music" />
               <Fact icon={<FaFlag />} label="Heritage" value="Tibetan" />
