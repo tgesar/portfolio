@@ -145,7 +145,7 @@ export default function ResumePage() {
               <Card
                 logo="/3m.png"
                 alt="3M Logo"
-                date="May 2025 – Present"
+                date="May 2025 – August 2025"
                 title="Automation Engineer Intern"
                 company="3M"
                 bullets={[
