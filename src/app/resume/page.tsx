@@ -202,7 +202,7 @@ export default function ResumePage() {
                 name="University of Minnesota"
                 title="BASc in Information Technology Infrastructure — Security"
                 details={[
-                  'September 2021 – August 2025',
+                  'September 2021 – Present',
                   "Dean’s List (4x), Microsoft CoPilot Student Ambassador",
                 ]}
               />
