@@ -181,7 +181,7 @@ export default function ResumePage() {
               <Card
                 logo="/fairview.png"
                 alt="Fairview Logo"
-                date="Aug 2022 – May 2023"
+                date="Aug 2022 – May 2024"
                 title="Technical Support Product Specialist"
                 company="Fairview Health Services"
                 bullets={[
