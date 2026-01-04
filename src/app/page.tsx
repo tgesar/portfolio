@@ -115,7 +115,7 @@ export default function Home() {
           </h2>
 
           <p className="mb-7 text-lg text-zinc-300">
-            A passionate IT Infrastructure Security student focused on automation, cloud, and clean development.
+            A passionate IT Infrastructure Security Professional focused on automation, cloud, and clean development.
           </p>
 
           {/* CTAs */}
@@ -153,7 +153,7 @@ export default function Home() {
             <div className="pointer-events-none absolute inset-0 rounded-xl shadow-[0_0_40px_-15px_#00e5ff,0_0_70px_-30px_#8e84ff_inset]" />
             <p className="text-lg font-semibold text-[#9ae8ff]">IT Experience</p>
             <p className="mt-1 text-sm text-zinc-400">
-              2+ years across automation, support, and security — with two technical internships (3M & Virtual Radiologic).
+              4+ years across automation, support, and security — with two technical internships (3M & Virtual Radiologic).
             </p>
             <p className="mt-4 text-sm text-zinc-400">
               Fun Fact: I built my first PowerApp before I knew what PowerApps even were!
